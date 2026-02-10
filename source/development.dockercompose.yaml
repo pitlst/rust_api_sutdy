@@ -30,10 +30,7 @@ services:
         command: tail -f /dev/null
 
     clickhouse:
-        build:
-            context: .
-            dockerfile: clickhouse_selfbuild.dockerfile
-        image: clickhouse-selfbuild:local
+        image: clickhouse_selfbuild:lts-jammy
         container_name: clickhouse
         ports:
             - "8123:8123"
@@ -44,10 +41,13 @@ services:
         volumes:
             - clickhouse_data:/var/lib/clickhouse
             - clickhouse_logs:/var/log/clickhouse-server
+        cap_add:
+            - IPC_LOCK
+            - SYS_NICE
         environment:
-            - CLICKHOUSE_DB=default
-            - CLICKHOUSE_USER=cheakf
-            - CLICKHOUSE_PASSWORD=Swq8855830.
+            CLICKHOUSE_USER: cheakf
+            CLICKHOUSE_PASSWORD: Swq8855830.
+            TZ: Asia/Shanghai
         ulimits:
             nofile:
                 soft: 262144
