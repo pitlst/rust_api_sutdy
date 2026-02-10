@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+    back_api_dev:
+        image: ubuntu:24.04
+        container_name: back_api_dev
+        working_dir: /app
+        ports:
+            - "20222:22"
+        networks:
+            - api_net
+        restart: unless-stopped
+        volumes:
+            - ./backend:/app
+        command: tail -f /dev/null
+        depends_on:
+            - clickhouse
+
+    front_end_dev:
+        image: oven/bun:latest
+        container_name: front_end_dev
+        working_dir: /app
+        ports:
+            - "5173:5173"
+        networks:
+            - api_net
+        restart: unless-stopped
+        volumes:
+            - ./frontend:/app
+        command: tail -f /dev/null
+
+    clickhouse:
+        build:
+            context: .
+            dockerfile: clickhouse_selfbuild.dockerfile
+        image: clickhouse-selfbuild:local
+        container_name: clickhouse
+        ports:
+            - "8123:8123"
+            - "9000:9000"
+        networks:
+            - api_net
+        restart: unless-stopped
+        volumes:
+            - clickhouse_data:/var/lib/clickhouse
+            - clickhouse_logs:/var/log/clickhouse-server
+        environment:
+            - CLICKHOUSE_DB=default
+            - CLICKHOUSE_USER=cheakf
+            - CLICKHOUSE_PASSWORD=Swq8855830.
+        ulimits:
+            nofile:
+                soft: 262144
+                hard: 262144
+
+networks:
+    api_net:
+        driver: bridge
+        name: api_net
+
+volumes:
+    clickhouse_data:
+    clickhouse_logs:
