@@ -1,6 +1,21 @@
 version: "3.8"
 
 services:
+    front_end_dev:
+        image: ubuntu:24.04
+        container_name: front_end_dev
+        working_dir: /app
+        ports:
+            - "20221:22"
+        networks:
+            - api_net
+        restart: unless-stopped
+        volumes:
+            - ../frontend:/app
+        command: tail -f /dev/null
+        depends_on:
+            - back_api_dev
+
     back_api_dev:
         image: ubuntu:24.04
         container_name: back_api_dev
@@ -11,23 +26,10 @@ services:
             - api_net
         restart: unless-stopped
         volumes:
-            - ./backend:/app
+            - ../backend:/app
         command: tail -f /dev/null
         depends_on:
             - clickhouse
-
-    front_end_dev:
-        image: oven/bun:latest
-        container_name: front_end_dev
-        working_dir: /app
-        ports:
-            - "5173:5173"
-        networks:
-            - api_net
-        restart: unless-stopped
-        volumes:
-            - ./frontend:/app
-        command: tail -f /dev/null
 
     clickhouse:
         image: clickhouse_selfbuild:lts-jammy
