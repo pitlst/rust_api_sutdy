@@ -55,6 +55,22 @@ services:
                 soft: 262144
                 hard: 262144
 
+    postgres:
+        image: postgres:18.2
+        container_name: postgres
+        ports:
+            - "5432:5432"
+        networks:
+            - api_net
+        restart: unless-stopped
+        volumes:
+            - pgsql_data:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: cheakf
+            POSTGRES_PASSWORD: Swq8855830.
+            POSTGRES_DB: postgres
+        command: -c shared_buffers=256MB
+
 networks:
     api_net:
         driver: bridge
@@ -63,3 +79,4 @@ networks:
 volumes:
     clickhouse_data:
     clickhouse_logs:
+    pgsql_data:

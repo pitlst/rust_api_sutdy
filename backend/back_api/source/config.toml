@@ -1,0 +1,9 @@
+# 数据库连接url
+database_url = "http://clickhouse:8123"
+# 数据库连接用户名
+database_user = "cheakf"
+# 数据库连接密码
+database_password = "Swq8855830."
+# 数据库连接的默认模式名称
+database_db = "default"
+
