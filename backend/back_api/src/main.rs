@@ -3,7 +3,7 @@ mod database;
 mod logger;
 mod utils;
 
-use database::ClickhouseConnect;
+use database::clickhouse::ClickhouseConnect;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

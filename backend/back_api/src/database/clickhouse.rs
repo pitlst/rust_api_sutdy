@@ -16,3 +16,10 @@ impl ClickhouseConnect {
         connect
     }
 }
+
+impl Drop for ClickhouseConnect {
+    fn drop(&mut self) {
+        let client = std::mem::replace(&mut self.client, Client::default());
+        drop(client);
+    }
+}
